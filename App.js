@@ -3,11 +3,26 @@ import { StyleSheet, View, StatusBar, Platform } from 'react-native';
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
 import reducer from './reducers'
+import { Constants } from 'expo'
 import middleware from './middleware'
-import AppNavigator from './navigation/AppNavigator';
+import MainNavigator from './navigation/MainNavigator';
+import Colors from './constants/Colors';
+import { setLocalNotification } from './utils/notifications'
 
+function AppStatusBar({ backgroundColor, ...props }) {
+  return (
+    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
+      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
+    </View>
+  )
+}
 
 export default class App extends Component {
+
+  componentDidMount() {
+    setLocalNotification()
+  }
+
 
   render() {
 
@@ -16,8 +31,8 @@ export default class App extends Component {
     return (
       <Provider store={store}>
         <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <AppStatusBar backgroundColor={Colors.tintColor} barStyle="light-content" />
+          <MainNavigator />
         </View>
       </Provider>
 

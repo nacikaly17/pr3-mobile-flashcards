@@ -1,5 +1,7 @@
-const tintColor = '#2f95dc';
 
+// deepskyblue (#00bfff)
+
+const tintColor = '#00bfff';
 export default {
     tintColor,
     tabIconDefault: '#ccc',
@@ -19,4 +21,6 @@ export default {
     blue: '#4e4cb8',
     lightPurp: '#7c53c3',
     pink: '#b93fb3',
+    green: '#008000',
+    lightgray: '#d3d3d3'
 };

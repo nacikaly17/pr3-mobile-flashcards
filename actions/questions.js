@@ -8,9 +8,11 @@ export function receiveQuestions(questions) {
     }
 }
 
-export function addQuestion(card) {
+export function addQuestion(title, id, card) {
     return {
         type: ADD_QUESTION,
-        card,
+        title,
+        id,
+        card
     }
 }

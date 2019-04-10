@@ -7,9 +7,10 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import Colors from '../constants/Colors';
-import SubmitBtn from '../components/SubmitBtn'
+import SubmitBtn from './SubmitBtn'
 import { addDeck } from '../actions/decks'
 import { formatDeck } from '../utils/helpers'
+import { saveDeck } from '../utils/api'
 
 class NewDeck extends Component {
 
@@ -32,20 +33,22 @@ class NewDeck extends Component {
 
         // Update Redux
         const { dispatch } = this.props
+        const deck = formatDeck(title)
         dispatch(addDeck({
-            [title]: formatDeck(title)
+            [title]: deck
         }))
-
 
         this.setState(() => ({
-            deckTitle: '',
+            deckTitle: null,
         }))
-        // Navigate to AddCard
+
+        // Save to 'DB'
+        saveDeck({ title, deck })
+
         navigation.navigate(
             'AddCard',
             { title: title, numberOfCards: 0 }
         )
-        // Save to 'DB'
 
 
     }
@@ -66,6 +69,7 @@ class NewDeck extends Component {
                     <View style={{ height: 20 }} />
                     <SubmitBtn
                         title='Submit'
+                        addStyle={{ backgroundColor: Colors.purple }}
                         onPress={this._submit}
                     />
                 </View>
@@ -78,7 +82,7 @@ class NewDeck extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingTop: 20,
         alignItems: 'center',
         justifyContent: 'flex-start',
     },

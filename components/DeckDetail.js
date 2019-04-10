@@ -1,19 +1,51 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Platform, Button, TouchableOpacity } from 'react-native';
+import { Alert, Text, View, StyleSheet, Platform } from 'react-native';
 import { connect } from 'react-redux'
 import Colors from '../constants/Colors';
-import SubmitBtn from '../components/SubmitBtn'
+import SubmitBtn from './SubmitBtn'
 
 class DeckDetail extends Component {
 
     static navigationOptions = ({ navigation }) => ({
-        title: `${navigation.state.params.title}`,
+        title: `DECK : ${navigation.state.params.title}`,
     })
 
-    render() {
+    _deleteButton = () => {
         const { navigation } = this.props
         const title = navigation.state.params.title
-        const number = navigation.state.params.numberOfCards
+        Alert.alert(`Delete Deck : ${title}?`,
+            'It deletes in storage for ever.',
+            [
+                { text: 'Cancel', style: 'cancel' },
+                {
+                    text: 'Delete', style: 'destructive',
+                    onPress: () => this._deleteDeck()
+                }
+            ]
+        );
+    }
+
+    _deleteDeck = () => {
+        const { navigation } = this.props
+
+        navigation.navigate(
+            'Tabs'
+        )
+    }
+
+    _displayNextQuote() {
+        let { index, quotes } = this.state;
+        let nextIndex = index + 1;
+        if (nextIndex === quotes.length) nextIndex = 0;
+        this.setState({ index: nextIndex })
+    }
+
+    render() {
+        const { navigation, decks } = this.props
+        const title = navigation.state.params.title
+
+        const number = decks[title].questions.length
+
         navigation.navigationOptions = {
             headerTitle: title,
         }
@@ -24,11 +56,12 @@ class DeckDetail extends Component {
             <View style={styles.container}>
                 <View style={styles.item}>
                     <Text style={{ fontSize: 20 }}>{title}</Text>
-                    <Text >{number} {text}</Text>
+                    <Text >has {number} {text}</Text>
                 </View>
                 <View style={styles.center}>
                     <SubmitBtn
                         title='ADD CARD'
+                        addStyle={{ backgroundColor: Colors.gray }}
                         onPress={() => {
                             navigation.navigate(
                                 'AddCard',
@@ -36,14 +69,22 @@ class DeckDetail extends Component {
                             )
                         }} />
                     <View style={{ height: 20 }} />
-                    <SubmitBtn
-                        title='QUIZ'
-                        onPress={() => {
-                            navigation.navigate(
-                                'Quiz',
-                                { title: title, numberOfCards: number }
-                            )
-                        }} />
+                    {number > 0
+                        ? (
+                            <SubmitBtn
+                                title='QUIZ'
+                                addStyle={{ backgroundColor: Colors.purple }}
+                                onPress={() => {
+                                    navigation.navigate(
+                                        'Quiz',
+                                        { title: title, numberOfCards: number }
+                                    )
+                                }} />
+                        )
+                        : (
+                            <View></View>
+                        )}
+
                 </View>
             </View>
         );
@@ -53,7 +94,6 @@ class DeckDetail extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: Colors.tintColor
     },
     item: {
@@ -79,7 +119,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginLeft: 30,
         marginRight: 30,
-    }
+    },
+    deleteButton: {
+        backgroundColor: Colors.white,
+        borderColor: Colors.red,
+        color: Colors.red,
+        margin: 10,
+        borderRadius: 7,
+    },
 
 });
 

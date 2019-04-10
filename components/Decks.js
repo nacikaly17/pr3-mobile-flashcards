@@ -9,10 +9,11 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import { AppLoading } from 'expo'
-import { handleInitialData } from '../actions/shared'
 import Colors from '../constants/Colors';
+import { handleInitialDataStorage } from '../actions/shared'
 
-class Home extends Component {
+
+class Decks extends Component {
 
     state = {
         ready: false,
@@ -30,7 +31,6 @@ class Home extends Component {
         let text = number > 1 ? 'cards' : 'card'
         return (
             <TouchableOpacity
-                //onPress={() => console.log('Pressed!')}>
                 onPress={() => navigation.navigate(
                     'DeckDetail',
                     { title: title, numberOfCards: number }
@@ -40,15 +40,15 @@ class Home extends Component {
                     <Text >{number} {text}</Text>
                 </View>
             </TouchableOpacity>
-        )
+        );
 
     }
 
     componentDidMount() {
 
         const { dispatch } = this.props
-        dispatch(handleInitialData())
-            .then(() => this.setState(() => ({ ready: true })))
+
+        dispatch(handleInitialDataStorage()).then(() => this.setState(() => ({ ready: true })))
 
     }
 
@@ -61,17 +61,27 @@ class Home extends Component {
             { title: id, questions: decks[id].questions }
         ));
 
+        const numberOfDecks = deckList.length
+
         if (ready === false) {
             return <AppLoading />
         }
 
         return (
             <View style={styles.container}>
-                <FlatList
-                    data={deckList}
-                    renderItem={this._renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-                />
+                {numberOfDecks === 0
+                    ? (
+                        <View style={[styles.item, { backgroundColor: Colors.red }]}>
+                            <Text style={{ fontSize: 20, color: Colors.white }}>No DECKS found in DB</Text>
+                        </View>
+                    )
+                    : (
+                        <FlatList
+                            data={deckList}
+                            renderItem={this._renderItem}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    )}
             </View>
         )
     }
@@ -112,4 +122,4 @@ function mapStateToProps(data) {
     }
 }
 
-export default connect(mapStateToProps)(Home)
+export default connect(mapStateToProps)(Decks)

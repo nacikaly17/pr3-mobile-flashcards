@@ -1,6 +1,7 @@
 import {
     RECEIVE_DECKS,
     ADD_DECK,
+    REMOVE_DECK,
 } from '../actions/decks'
 import { ADD_QUESTION } from '../actions/questions';
 
@@ -20,9 +21,10 @@ function decks(state = {}, action) {
         case ADD_QUESTION:
             return {
                 ...state,
-                [action.card.title]: {
-                    ...state[action.card.title],
-                    questions: state[action.card.title].questions.concat([action.card.id])
+                [action.title]: {
+                    ...state[action.title],
+                    questions:
+                        state[action.title].questions.concat([action.id])
                 }
             }
 

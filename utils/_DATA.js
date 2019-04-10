@@ -9,6 +9,11 @@ let decks = {
         timestamp: 1467166872634,
         questions: ['am8ehyc8byjqgar0jgpub9']
     },
+    Pascal: {
+        title: 'Pascal',
+        timestamp: 1467166872634,
+        questions: []
+    },
 }
 
 let questions = {
@@ -36,10 +41,6 @@ let questions = {
 
 }
 
-function generateUID() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-}
-
 export function _getDecks() {
     return new Promise((res, rej) => {
         setTimeout(() => res({ ...decks }), 1000)
@@ -51,58 +52,3 @@ export function _getQuestions() {
         setTimeout(() => res({ ...questions }), 1000)
     })
 }
-
-function formatDeck(title) {
-    return {
-        title: title,
-        timestamp: Date.now(),
-        questions: []
-    }
-}
-
-function formatQuestion(card) {
-    return {
-        id: generateUID(),
-        title: card.title,
-        timestamp: Date.now(),
-        question: card.question,
-        answer: card.answer,
-    }
-}
-
-export function _saveDeck(title) {
-    return new Promise((res, rej) => {
-        const formattedDeck = formatDeck(title);
-        setTimeout(() => {
-            decks = {
-                ...decks,
-                [formattedDeck.title]: formattedDeck
-            }
-            res(formattedDeck)
-        }, 1000)
-    })
-}
-
-export function _saveQuestion(card) {
-    return new Promise((res, rej) => {
-        const title = card.title;
-        const formattedQuestion = formatQuestion(card);
-        setTimeout(() => {
-            questions = {
-                ...questions,
-                [formattedQuestion.id]: formattedQuestion
-            }
-
-            decks = {
-                ...decks,
-                [title]: {
-                    ...decks[title],
-                    questions: decks[title].questions.concat([formattedQuestion.id])
-                }
-            }
-
-            res(formattedQuestion)
-        }, 1000)
-    })
-}
-

@@ -7,9 +7,11 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux'
 import Colors from '../constants/Colors';
-import SubmitBtn from '../components/SubmitBtn'
+import SubmitBtn from './SubmitBtn'
 import { addQuestion } from '../actions/questions'
 import { formatQuestion, generateUID } from '../utils/helpers'
+import { saveCard } from '../utils/api'
+import { setLocalNotification, clearLocalNotification } from '../utils/notifications'
 
 class AddCard extends Component {
 
@@ -35,9 +37,7 @@ class AddCard extends Component {
 
         // Update Redux
 
-        dispatch(addQuestion({
-            [id]: card
-        }))
+        dispatch(addQuestion(title, id, { [id]: card }))
 
 
         this.setState(() => ({
@@ -46,15 +46,19 @@ class AddCard extends Component {
         }))
 
         // Save to 'DB'
+        saveCard({ id, card })
 
+        clearLocalNotification()
+            .then(setLocalNotification)
 
     }
 
 
     render() {
-        const { navigation } = this.props
+        const { navigation, decks, questions } = this.props
         const title = navigation.state.params.title
-        const number = navigation.state.params.numberOfCards
+        const number = decks[title].questions.length
+
 
         return (
             <View style={styles.container}>
@@ -79,6 +83,7 @@ class AddCard extends Component {
                     <View style={{ height: 20 }} />
                     <SubmitBtn
                         title='Submit'
+                        addStyle={{ backgroundColor: Colors.purple }}
                         onPress={this._submit}
                     />
                 </View>
@@ -91,7 +96,7 @@ class AddCard extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingTop: 20,
         alignItems: 'center',
         justifyContent: 'flex-start',
     },

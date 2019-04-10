@@ -8,12 +8,16 @@ import {
 
 import Colors from '../constants/Colors';
 
-function SubmitBtn({ title, onPress }) {
+function SubmitBtn({ title, addStyle, onPress }) {
+
+    const styleBasic =
+        Platform.OS === 'ios'
+            ? styles.iosSubmitBtn
+            : styles.androidSubmitBtn
+
     return (
         <TouchableOpacity
-            style={Platform.OS === 'ios'
-                ? styles.iosSubmitBtn
-                : styles.androidSubmitBtn}
+            style={[styleBasic, addStyle]}
             onPress={onPress}>
             <Text style={styles.submitBtnText}>{title}</Text>
         </TouchableOpacity>
@@ -22,7 +26,7 @@ function SubmitBtn({ title, onPress }) {
 
 const styles = StyleSheet.create({
     iosSubmitBtn: {
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.pruple,
         padding: 10,
         borderRadius: 7,
         height: 45,
@@ -31,7 +35,7 @@ const styles = StyleSheet.create({
         marginRight: 40,
     },
     androidSubmitBtn: {
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.pruple,
         padding: 10,
         paddingLeft: 30,
         paddingRight: 30,
@@ -48,5 +52,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
 });
+
 
 export default SubmitBtn
