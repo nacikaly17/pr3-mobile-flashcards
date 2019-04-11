@@ -10,12 +10,7 @@ This project encompasses the fundamental aspects of building a native applicatio
 ## Environment
 This program requires **node.js** and **npm** program envirenment
 Go to [Node.js](https://nodejs.org/en/download/) downloads page and install it if it's not installed yet.
-This program requires **Expo**  program envirenment .
-Expo is a service that makes just about everything involving React Native a whole lot easier.
-The idea behind Expo is that there's no need to use Android Studio or Xcode. What's more: it even allows us to develop for iOS with Windows (or even Linux)!
 
-## Install Expo
-Run `npm install -g exp`  to install exp globally.
 
 ## Install
 Clone  project files from [GitHub](https://github.com/nacikaly17/pr3-mobile-flashcards.git) .
@@ -31,11 +26,13 @@ $ cd pr3-mobile-flashcards
 After cloning the project files you will find in the project directory the scripts:  You can run:
 
 * install all project dependencies with `npm install`
-* start the development server with `expo start`
-
+* start the development server with `npm start`
+Expo DevTools is running at http://localhost:19002
 Open [http://localhost:19002](http://localhost:19002) to view it in the browser.
 
 ## iOS platform simulation test screens .
+I  have tested this app with IOS Simulator : Version 10.2 (SimulatorApp-880.5 CoreSimulator-587.35)
+
 ![Deck List View](images/ios/1-DeckListView.png)
 ![Deck Detail View](images/ios/2-DeckDetailView.png)
 ![Quiz View](images/ios/3-QuizView.png)
@@ -50,3 +47,4 @@ added a new card to deck.
 
 This project was bootstrapped with [create-react-native-app](https://github.com/facebookincubator/create-react-app). You can find more information on how to perform common tasks [here](https://facebook.github.io/react-native/docs/getting-started.html).
 Note that Create React Native App uses Expo CLI under the hood. You can get up and running with React Native using the instructions on this page, but feel free to visit the React Native Quick Start guide if you prefer to use "vanilla" Expo CLI as an alternative.
+https://expo.io/

@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux'
 import { AppLoading } from 'expo'
 import Colors from '../constants/Colors';
-import { handleInitialDataStorage } from '../actions/shared'
+import { handleInitialDataStorage, handleInitialData } from '../actions/shared'
 
 
 class Decks extends Component {
@@ -48,8 +48,17 @@ class Decks extends Component {
 
         const { dispatch } = this.props
 
-        dispatch(handleInitialDataStorage()).then(() => this.setState(() => ({ ready: true })))
-
+        //dispatch(handleInitialData()).then(() => this.setState(() => ({ ready: true })))
+        //dispatch(handleInitialDataStorage()).then(() => this.setState(() => ({ ready: true })))
+        /**
+         * Great start : Review recomendation.
+         * You can possibly have a set of initial decks and questions 
+         * which will allow the user to get started with the app straight away. 
+         * You can also consider adding splash screen to improve user experience.
+         */
+        dispatch(handleInitialData())   // 
+            .then(() => dispatch(handleInitialDataStorage())
+                .then(() => this.setState(() => ({ ready: true }))))
     }
 
     render() {

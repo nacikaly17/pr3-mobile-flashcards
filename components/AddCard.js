@@ -11,7 +11,6 @@ import SubmitBtn from './SubmitBtn'
 import { addQuestion } from '../actions/questions'
 import { formatQuestion, generateUID } from '../utils/helpers'
 import { saveCard } from '../utils/api'
-import { setLocalNotification, clearLocalNotification } from '../utils/notifications'
 
 class AddCard extends Component {
 
@@ -48,11 +47,21 @@ class AddCard extends Component {
         // Save to 'DB'
         saveCard({ id, card })
 
-        clearLocalNotification()
-            .then(setLocalNotification)
-
+        navigation.navigate(
+            'DeckDetail',
+            { title: title, numberOfCards: 0 }
+        )
     }
 
+    _onChangeText = (qa, text) => {
+
+        this.setState((state) => {
+            return {
+                ...state,
+                [qa]: text,
+            }
+        })
+    }
 
     render() {
         const { navigation, decks, questions } = this.props
@@ -69,14 +78,14 @@ class AddCard extends Component {
                     placeholder="Question"
                     underlineColorAndroid="transparent"
                     multiline={true}
-                    onChangeText={text => this.setState({ question: text })}
+                    onChangeText={(text) => this._onChangeText("question", text)}
                 />
                 <TextInput
                     style={[styles.input, { height: 200 }]}
                     placeholder="Answer"
                     underlineColorAndroid="transparent"
                     multiline={true}
-                    onChangeText={text => this.setState({ answer: text })}
+                    onChangeText={(text) => this._onChangeText("answer", text)}
                 />
 
                 <View style={styles.center}>

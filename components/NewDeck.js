@@ -46,7 +46,7 @@ class NewDeck extends Component {
         saveDeck({ title, deck })
 
         navigation.navigate(
-            'AddCard',
+            'DeckDetail',
             { title: title, numberOfCards: 0 }
         )
 

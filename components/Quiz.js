@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Colors from '../constants/Colors';
 import SubmitBtn from './SubmitBtn'
 import StyledButton from './StyledButton'
+import { setLocalNotification, clearLocalNotification } from '../utils/notifications'
 
 
 class Quiz extends Component {
@@ -19,35 +20,6 @@ class Quiz extends Component {
         quizCompleted: false,
     };
 
-    _nextQuestion = () => {
-        const { navigation, decks } = this.props
-        const title = navigation.state.params.title
-        const numberOfCards = decks[title].questions.length
-        let { index } = this.state;
-        let nextIndex = index + 1;
-        if (nextIndex === numberOfCards) {
-            nextIndex = index;
-            this.setState({ quizCompleted: true })
-        }
-        this.setState({ index: nextIndex })
-    }
-
-    _correctAnswer = () => {
-
-        this._nextQuestion()
-
-        let { correctAnswer } = this.state;
-        correctAnswer += 1
-        this.setState({ correctAnswer: correctAnswer })
-        this.setState({ showAnswer: false })
-    }
-
-    _inCorrectAnswer = () => {
-
-        this._nextQuestion()
-        this.setState({ showAnswer: false })
-    }
-
     _restartQuiz = () => {
 
         this.setState({
@@ -58,6 +30,30 @@ class Quiz extends Component {
         })
     }
 
+    _nextQuestion = (answer) => {
+        const { navigation, decks } = this.props
+        const title = navigation.state.params.title
+        const numberOfCards = decks[title].questions.length
+
+        const { index, correctAnswer } = this.state;
+        let quizCompleted = false;
+        let nextIndex = index + 1;
+        if (nextIndex === numberOfCards) {
+            nextIndex = index;
+            quizCompleted = true;
+
+            // Update  Notification
+            clearLocalNotification()
+                .then(setLocalNotification)
+
+        }
+        this.setState({
+            index: nextIndex,
+            showAnswer: false,
+            correctAnswer: correctAnswer + answer,
+            quizCompleted: quizCompleted,
+        })
+    }
     render() {
 
         const { navigation, decks, questions } = this.props
@@ -143,12 +139,12 @@ class Quiz extends Component {
                             <SubmitBtn
                                 title='Correct'
                                 addStyle={{ backgroundColor: Colors.green }}
-                                onPress={this._correctAnswer} />
+                                onPress={() => this._nextQuestion(1)} />
                             <View style={{ height: 20 }} />
                             <SubmitBtn
                                 title='Incorrect'
                                 addStyle={{ backgroundColor: Colors.red }}
-                                onPress={this._inCorrectAnswer} />
+                                onPress={() => this._nextQuestion(0)} />
                         </View>
                     )}
 
